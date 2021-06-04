@@ -79,3 +79,8 @@ test('allSunk() should return true if all ships are fully hit', () => {
   newBoard.receiveAttack([6,5])
   expect(newBoard.allSunk()).toBe(true)
 })
+
+test('populate random ships should create 5 ships that do not overlap', () => {
+  newBoard.populateRandomShips()
+  expect(newBoard.ships.length).toBe(5)
+})

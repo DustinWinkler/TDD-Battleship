@@ -1,6 +1,95 @@
+html {
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: rgb(3, 44, 82);
+}
+
+.header-container {
+  display: block;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 20px 0;
+  font-style: italic;
+}
+
+.main-header {
+  text-align: center;
+  font-size: 35px;
+  font-weight: 900;
+  text-shadow: 0 0 75px rgba(255, 255, 255, 0.603);
+}
+
+.app {
+  position: relative;
+}
+
+.modal-hidden {
+  display: none;
+}
+
+.modal {
+  display: inline-block;
+  position: absolute;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(172, 172, 172, 0.945);
+}
+
+.modal-content {
+  width: 300px;
+  margin: 100px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.modal-content h1 {
+  padding: 0;
+  margin: 10px auto;
+}
+
+.modal-content p {
+  margin: 10px auto;
+}
+
+.modal-content button {
+  background-color: white;
+  border: 1px solid gray;
+  font-size: 15px;
+  border-radius: 5px;
+  width: 150px;
+}
+
+.modal-content button:hover {
+  background-color: gray;
+  border-color: black;
+  color: white;
+}
+
+.buttons {
+  width: 300px;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.game-container {
+  display: flex;
+  justify-content: space-between;
+  width: 90vw;
+  max-width: 800px;
+  margin: auto;
+}
 
 .square-container {
-  max-width: fit-content;
+  width: fit-content;
+  height: auto;
   margin: auto;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -9,13 +98,14 @@
 }
 
 .square {
-  width: 25px;
-  height: 25px;
+  position: relative;
+  width: 30px;
+  height: 30px;
   border: 1px solid rgb(175, 175, 175);
 }
 
 .placed {
-  background-color: gray;
+  background-color: rgba(128, 128, 128, 0.904) !important;
 }
 
 .hovered {
@@ -24,4 +114,53 @@
 
 .square:hover {
   border-color: green;
+}
+
+.hit::after {
+  content: "✕";
+  font-size: 2rem;
+  color: red;
+}
+
+.miss:after {
+  content: "•";
+  font-size: 2rem;
+  display: inline-block;
+  text-align: center;
+  vertical-align: bottom;
+  color: rgb(165, 164, 164);
+  height: 30px;
+  width: 30px;
+}
+
+.rotate {
+  display: block;
+  padding: 2px;
+  margin: 10px auto;
+  width: 100px;
+  color: red;
+  border: 1px solid black;
+  border-radius: 6px;
+  font-size: 15px;
+  text-shadow: 0 0 50px rgb(0, 0, 0);
+}
+
+.rotate:hover {
+  background-color: rgb(141, 141, 141);
+}
+
+.green {
+  background-color: rgb(185, 185, 185);
+  color: rgb(28, 119, 28);
+}
+
+.red {
+  background-color: rgb(161, 161, 161);
+  color: rgb(161, 37, 15);
+}
+
+.board-text {
+  color: white;
+  margin: 10px 0;
+  text-align: center;
 }

@@ -22,6 +22,9 @@ const createGameboard = () => {
     let ship = createShip(shipLength)
     let x = coords[0]
     let y = coords[1]
+    let stringified = JSON.stringify(coords)
+
+    if(allCoords().some(coord => JSON.stringify(coord) === stringified)) { return false}
 
     // if out of bounds, return false
     const oOB = () => {
@@ -52,6 +55,7 @@ const createGameboard = () => {
       }
     }
     ships.push(ship)
+    return true
   }
 
   const receiveAttack = (array) => {
@@ -77,17 +81,22 @@ const createGameboard = () => {
 
     if (shipToHit) {
       shipToHit.hit(spaceToHit)
+      return true
     } else {
       return false
     }
   }
 
   const allSunk = () => {
-   if (ships.every(ship => ship.isSunk())) {
-     return true
-   } else {
-     return false
-   }
+    if (ships.length === 0) {
+      return false
+    }
+
+    if (ships.every(ship => ship.isSunk())) {
+      return true
+    } else {
+      return false
+    }
   }
 
   const allCoords = () => {
@@ -100,6 +109,45 @@ const createGameboard = () => {
     return allCoords
   }
 
+  const populateRandomShips = () => {
+    ships = []
+
+    placeShip(5, randomCoords(), (Math.random() < parseFloat(0.5)))
+
+    function randomCoords () {
+      let coord = []
+      coord.push(Math.floor(Math.random() * 10))
+      coord.push(Math.floor(Math.random() * 10))
+      return coord
+    }
+
+    function getShortestShip() {
+      let shortGuy = 6
+      ships.forEach(ship => {
+        if (ship.length < shortGuy) {shortGuy = ship.length}
+      })
+      return shortGuy
+    }
+
+    while (ships.length <= 4) {
+     placeShip((getShortestShip() - 1), randomCoords(), (Math.random() < parseFloat(0.5)))
+    }
+    
+    let overlap = false
+
+    let stringedArray = allCoords().map(JSON.stringify)
+    let newSet = new Set(stringedArray)
+    
+    if (newSet.size < allCoords().length) {
+      overlap = true
+    }
+ 
+    if (overlap) {
+      populateRandomShips()
+    }
+    
+  }
+
   return {
     grid,
     placeShip,
@@ -107,7 +155,8 @@ const createGameboard = () => {
     receiveAttack,
     attacks,
     allSunk,
-    allCoords
+    allCoords,
+    populateRandomShips
   }
 }
 

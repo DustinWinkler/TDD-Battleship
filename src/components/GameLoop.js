@@ -1,71 +1,41 @@
 import React, {useState} from 'react'
-import { createPlayer } from "../game/Player";
-import GridSquare from "./GridSquare";
+import Setup from './Setup';
+import PostSetup from "./PostSetup";
 
-function GameLoop() {
-  const [hoveredCoords, setHoveredCoords] = useState([])
+function GameLoop(props) {
+  const [rotated, setRotated] = useState(false)
+  const [playerToPassDown, setPlayerToPassDown] = useState({})
+  const [shipsPlaced, setShipsPlaced] = useState(0)
 
-  let currentLength = 3
-  let rotated = false
-  let player1 = createPlayer()
-  //let player2 = createPlayer()
-
-  //Adds hovered Coords
-  window.addEventListener('mouseover', e => {
-
-    if (e.target.classList.contains('square')) {
-      setHoveredCoords([])
-      let id = e.target.id.split(',')
-      hoverSquares(id, currentLength, rotated)
-      console.log(hoveredCoords)
-    }
-  })
-
-  function hoverSquares(coord, length, rotated) {
-    let numberifiedCoord = coord.map(meme => parseInt(meme))
-    let coordsToHover = []
-    coordsToHover.push(numberifiedCoord)
-
-    for (let i = 1; i < length; i++) {
-      let newCoord = []
-      if (rotated){
-        newCoord.push(numberifiedCoord[0])
-        newCoord.push(numberifiedCoord[1] + i)
-      } else {
-        newCoord.push(numberifiedCoord[0] + i)
-        newCoord.push(numberifiedCoord[1])
-      }
-      coordsToHover.push(newCoord)
-    }
-    setHoveredCoords(coordsToHover)
+  function updateShipsPlaced() {
+    setShipsPlaced(prev => {
+      let newNum = prev + 1
+      return newNum
+    })
   }
 
-  player1.gameboard.placeShip(3, [3,3], false)
+  function bringPlayerUp(player) {
+    setPlayerToPassDown(player)
+  }
 
-  let player1Content = []
-  //let player2Content = []
-  
-  console.log(player1.gameboard.allCoords())
+  function toggleRotated() {
+    setRotated(!rotated)
+  }
 
-  player1.gameboard.grid.forEach((array, arrIndex) => {
-    array.forEach((cell, cellIndex) => {
-      let somethingPlacedHere = false
-      let hovered = false
-      let allCoords = player1.gameboard.allCoords()
-      let currCoord = JSON.stringify([arrIndex, cellIndex])
-
-      if(allCoords.some(coord => JSON.stringify(coord) === currCoord)) {somethingPlacedHere = true}
-      if(hoveredCoords.some(coord => JSON.stringify(coord) === currCoord)) {hovered = true}
-
-      player1Content.push(
-        <GridSquare hovered={hovered} placed={somethingPlacedHere} coord={[arrIndex, cellIndex]} key={currCoord}/>
-      )
-    })
-  })
+  let gameState
+  if (shipsPlaced >= 5) {
+    gameState = <PostSetup humanPlayer={playerToPassDown} />
+  } else {
+    gameState = (
+      <div>
+        <button className={"rotate " + (rotated ? "green" : "red")} onClick={()=>{toggleRotated()}}>{"Rotate " + (rotated ? "✓" : "✕")}</button>
+        <Setup sendPlayer={bringPlayerUp} rotated={rotated} placeShip={updateShipsPlaced} />
+      </div>)
+  }
 
   return (
-    <div className="square-container">
-      {player1Content}
+    <div>
+      {gameState}
     </div>
   )
 }
